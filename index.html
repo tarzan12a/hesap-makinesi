@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="tr" class="h-full select-none">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Modern Hesap Makinesi</title>
+    
+    <!-- PWA & Mobil Meta Etiketleri -->
+    <meta name="theme-color" content="#0f172a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="application-name" content="Hesap Makinesi">
+    <meta name="apple-mobile-web-app-title" content="Hesap Makinesi">
+    
+    <!-- PWA Manifest (Inline Web App Manifest) -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "Modern Hesap Makinesi",
+        "short_name": "Hesap Makinesi",
+        "description": "Android ve Windows için tam uyumlu gelişmiş hesap makinesi.",
+        "start_url": "./",
+        "display": "standalone",
+        "background_color": "#020617",
+        "theme_color": "#0f172a",
+        "icons": [
+            {
+                "src": "https://img.icons8.com/fluent/512/calculator.png",
+                "sizes": "512x512",
+                "type": "image/png",
+                "purpose": "any maskable"
+            }
+        ]
+    }'>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .btn-active:active { transform: scale(0.94); filter: brightness(1.2); }
+        button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 h-full flex flex-col justify-center items-center font-sans antialiased sm:p-4">
+
+    <!-- Ana Uygulama Konteyneri -->
+    <div class="w-full h-full sm:max-w-md sm:h-[840px] sm:rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl flex flex-col overflow-hidden relative">
+        
+        <!-- Üst Bar / Başlık & Geçmiş Butonu -->
+        <header class="flex items-center justify-between px-6 pt-6 pb-2 text-slate-400">
+            <span class="text-xs font-semibold tracking-wider uppercase flex items-center gap-1.5">
+                <i data-lucide="calculator" class="w-4 h-4 text-emerald-400"></i>
+                Hesap Makinesi
+            </span>
+            <button id="toggle-history-btn" class="p-2 rounded-full hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition-colors btn-active" title="Geçmişi Göster/Gizle">
+                <i data-lucide="history" class="w-5 h-5"></i>
+            </button>
+        </header>
+
+        <!-- Ekran Alanı -->
+        <div class="flex-1 flex flex-col justify-end px-6 py-4 text-right overflow-hidden relative">
+            <div id="expression-display" class="text-slate-400 text-lg sm:text-xl font-medium min-h-[1.75rem] overflow-x-auto no-scrollbar whitespace-nowrap tracking-wide"></div>
+            <div id="main-display" class="text-4xl sm:text-5xl font-bold text-slate-100 overflow-x-auto no-scrollbar whitespace-nowrap tracking-tight my-2">0</div>
+        </div>
+
+        <!-- İşlem Geçmişi Paneli -->
+        <div id="history-panel" class="absolute inset-x-0 bottom-0 top-16 bg-slate-900/95 backdrop-blur-md z-20 flex flex-col transition-transform duration-300 translate-y-full border-t border-slate-800">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-800">
+                <h3 class="font-semibold text-slate-200 flex items-center gap-2">
+                    <i data-lucide="clock" class="w-4 h-4 text-emerald-400"></i> İşlem Geçmişi
+                </h3>
+                <button id="clear-history-btn" class="text-xs font-medium text-rose-400 hover:text-rose-300 px-3 py-1.5 rounded-lg hover:bg-rose-950/30 transition-colors flex items-center gap-1">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Temizle
+                </button>
+            </div>
+            
+            <div id="history-list" class="flex-1 overflow-y-auto p-6 space-y-4">
+                <div class="text-center text-slate-500 text-sm py-8">Henüz işlem geçmişi yok.</div>
+            </div>
+
+            <button id="close-history-btn" class="m-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl font-medium text-sm transition-colors text-center">
+                Kapat
+            </button>
+        </div>
+
+        <!-- Tuş Takımı (Keypad) -->
+        <div class="grid grid-cols-4 gap-3 p-6 bg-slate-900/50 border-t border-slate-800/80 pb-8 sm:pb-6">
+            <button data-action="clear" class="btn-active py-4 sm:py-5 rounded-2xl bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 text-xl font-semibold transition-all">AC</button>
+            <button data-action="delete" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800 text-slate-300 hover:bg-slate-700 flex justify-center items-center transition-all">
+                <i data-lucide="backspace" class="w-6 h-6"></i>
+            </button>
+            <button data-action="operator" data-value="%" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800 text-emerald-400 hover:bg-slate-700 text-xl font-semibold transition-all">%</button>
+            <button data-action="operator" data-value="/" class="btn-active py-4 sm:py-5 rounded-2xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-2xl font-bold transition-all">÷</button>
+
+            <button data-action="number" data-value="7" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">7</button>
+            <button data-action="number" data-value="8" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">8</button>
+            <button data-action="number" data-value="9" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">9</button>
+            <button data-action="operator" data-value="*" class="btn-active py-4 sm:py-5 rounded-2xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-2xl font-bold transition-all">×</button>
+
+            <button data-action="number" data-value="4" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">4</button>
+            <button data-action="number" data-value="5" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">5</button>
+            <button data-action="number" data-value="6" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">6</button>
+            <button data-action="operator" data-value="-" class="btn-active py-4 sm:py-5 rounded-2xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-2xl font-bold transition-all">−</button>
+
+            <button data-action="number" data-value="1" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">1</button>
+            <button data-action="number" data-value="2" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">2</button>
+            <button data-action="number" data-value="3" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">3</button>
+            <button data-action="operator" data-value="+" class="btn-active py-4 sm:py-5 rounded-2xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-2xl font-bold transition-all">+</button>
+
+            <button data-action="negate" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-300 hover:bg-slate-700 text-xl font-medium transition-all">±</button>
+            <button data-action="number" data-value="0" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">0</button>
+            <button data-action="decimal" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">.</button>
+            <button data-action="calculate" class="btn-active py-4 sm:py-5 rounded-2xl bg-emerald-500 text-slate-950 hover:bg-emerald-400 text-2xl font-bold shadow-lg shadow-emerald-500/20 transition-all">=</button>
+        </div>
+    </div>
+
+    <!-- JavaScript Mantığı & Çevrimdışı PWA Desteği -->
+    <script>
+        let currentInput = '0';
+        let previousInput = '';
+        let operator = null;
+        let shouldResetDisplay = false;
+        let history = JSON.parse(localStorage.getItem('calc_history') || '[]');
+
+        const mainDisplay = document.getElementById('main-display');
+        const expressionDisplay = document.getElementById('expression-display');
+        const historyPanel = document.getElementById('history-panel');
+        const historyList = document.getElementById('history-list');
+        const toggleHistoryBtn = document.getElementById('toggle-history-btn');
+        const closeHistoryBtn = document.getElementById('close-history-btn');
+        const clearHistoryBtn = document.getElementById('clear-history-btn');
+
+        lucide.createIcons();
+
+        function updateDisplay() {
+            mainDisplay.textContent = formatNumber(currentInput);
+            if (operator !== null) {
+                expressionDisplay.textContent = `${formatNumber(previousInput)} ${getOperatorSymbol(operator)}`;
+            } else {
+                expressionDisplay.textContent = '';
+            }
+            mainDisplay.scrollLeft = mainDisplay.scrollWidth;
+        }
+
+        function formatNumber(numStr) {
+            if (numStr === 'Hata' || numStr === '' || numStr === undefined) return numStr;
+            const parts = numStr.split('.');
+            let integerPart = parts[0];
+            const decimalPart = parts.length > 1 ? '.' + parts[1] : '';
+            let isNegative = false;
+            if (integerPart.startsWith('-')) {
+                isNegative = true;
+                integerPart = integerPart.substring(1);
+            }
+            const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            return (isNegative ? '-' : '') + formattedInteger + decimalPart;
+        }
+
+        function getOperatorSymbol(op) {
+            switch(op) {
+                case '+': return '+';
+                case '-': return '−';
+                case '*': return '×';
+                case '/': return '÷';
+                case '%': return '%';
+                default: return '';
+            }
+        }
+
+        function appendNumber(number) {
+            if (currentInput === '0' || shouldResetDisplay) {
+                currentInput = number;
+                shouldResetDisplay = false;
+            } else {
+                if (currentInput.replace(/[^0-9]/g, '').length >= 15) return;
+                currentInput += number;
+            }
+            updateDisplay();
+        }
+
+        function appendDecimal() {
+            if (shouldResetDisplay) {
+                currentInput = '0.';
+                shouldResetDisplay = false;
+                updateDisplay();
+                return;
+            }
+            if (!currentInput.includes('.')) {
+                currentInput += '.';
+                updateDisplay();
+            }
+        }
+
+        function chooseOperator(op) {
+            if (currentInput === 'Hata') return;
+            if (operator !== null && !shouldResetDisplay) calculate();
+            previousInput = currentInput;
+            operator = op;
+            shouldResetDisplay = true;
+            updateDisplay();
+        }
+
+        function calculate() {
+            if (operator === null || shouldResetDisplay) return;
+            let result;
+            const prev = parseFloat(previousInput);
+            const current = parseFloat(currentInput);
+
+            if (isNaN(prev) || isNaN(current)) return;
+
+            switch (operator) {
+                case '+': result = prev + current; break;
+                case '-': result = prev - current; break;
+                case '*': result = prev * current; break;
+                case '/': result = current === 0 ? 'Hata' : prev / current; break;
+                case '%': result = (prev * current) / 100; break;
+                default: return;
+            }
+
+            if (result !== 'Hata') {
+                result = Math.round(result * 100000000) / 100000000;
+                addHistoryItem({
+                    expression: `${formatNumber(previousInput)} ${getOperatorSymbol(operator)} ${formatNumber(currentInput)}`,
+                    result: result.toString()
+                });
+            }
+
+            currentInput = result.toString();
+            operator = null;
+            previousInput = '';
+            shouldResetDisplay = true;
+            updateDisplay();
+        }
+
+        function deleteDigit() {
+            if (shouldResetDisplay) return;
+            if (currentInput === 'Hata') { clearAll(); return; }
+            if (currentInput.length === 1 || (currentInput.length === 2 && currentInput.startsWith('-'))) {
+                currentInput = '0';
+            } else {
+                currentInput = currentInput.slice(0, -1);
+            }
+            updateDisplay();
+        }
+
+        function clearAll() {
+            currentInput = '0';
+            previousInput = '';
+            operator = null;
+            shouldResetDisplay = false;
+            updateDisplay();
+        }
+
+        function toggleNegate() {
+            if (currentInput === '0' || currentInput === 'Hata') return;
+            currentInput = currentInput.startsWith('-') ? currentInput.slice(1) : '-' + currentInput;
+            updateDisplay();
+        }
+
+        function addHistoryItem(item) {
+            history.unshift(item);
+            if (history.length > 30) history.pop();
+            localStorage.setItem('calc_history', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            if (history.length === 0) {
+                historyList.innerHTML = '<div class="text-center text-slate-500 text-sm py-8">Henüz işlem geçmişi yok.</div>';
+                return;
+            }
+            historyList.innerHTML = history.map((item, index) => `
+                <div class="p-3 bg-slate-800/50 hover:bg-slate-800 rounded-xl transition-colors cursor-pointer text-right history-item border border-slate-700/50" data-index="${index}">
+                    <div class="text-xs text-slate-400 mb-1">${item.expression}</div>
+                    <div class="text-lg font-semibold text-emerald-400">= ${formatNumber(item.result)}</div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.history-item').forEach(el => {
+                el.addEventListener('click', () => {
+                    const idx = el.getAttribute('data-index');
+                    currentInput = history[idx].result;
+                    shouldResetDisplay = false;
+                    updateDisplay();
+                    toggleHistory(false);
+                });
+            });
+        }
+
+        function toggleHistory(show) {
+            if (show) { renderHistory(); historyPanel.classList.remove('translate-y-full'); }
+            else { historyPanel.classList.add('translate-y-full'); }
+        }
+
+        document.querySelectorAll('button[data-action]').forEach(button => {
+            button.addEventListener('click', () => {
+                const action = button.getAttribute('data-action');
+                const value = button.getAttribute('data-value');
+                switch (action) {
+                    case 'number': appendNumber(value); break;
+                    case 'operator': chooseOperator(value); break;
+                    case 'decimal': appendDecimal(); break;
+                    case 'calculate': calculate(); break;
+                    case 'clear': clearAll(); break;
+                    case 'delete': deleteDigit(); break;
+                    case 'negate': toggleNegate(); break;
+                }
+            });
+        });
+
+        toggleHistoryBtn.addEventListener('click', () => toggleHistory(true));
+        closeHistoryBtn.addEventListener('click', () => toggleHistory(false));
+        clearHistoryBtn.addEventListener('click', () => {
+            history = [];
+            localStorage.removeItem('calc_history');
+            renderHistory();
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key >= '0' && e.key <= '9') appendNumber(e.key);
+            if (e.key === '.' || e.key === ',') appendDecimal();
+            if (e.key === '=' || e.key === 'Enter') { e.preventDefault(); calculate(); }
+            if (e.key === 'Backspace') deleteDigit();
+            if (e.key === 'Escape') clearAll();
+            if (['+', '-', '*', '/', '%'].includes(e.key)) chooseOperator(e.key);
+        });
+
+        // Offline Çevrimdışı Çalışma (Service Worker Entegrasyonu)
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                self.addEventListener('install', e => e.waitUntil(self.skipWaiting()));
+                self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+                self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
+            `;
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+        }
+
+        updateDisplay();
+    </script>
+</body>
+</html>
