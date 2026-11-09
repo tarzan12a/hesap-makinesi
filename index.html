@@ -1,592 +1,345 @@
 <!DOCTYPE html>
-<html lang="tr" class="scroll-smooth">
+<html lang="tr" class="h-full select-none">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>10 Kasım - Mustafa Kemal Atatürk'ü Sevgi, Saygı ve Minnetle Anıyoruz</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Modern Hesap Makinesi</title>
+    
+    <!-- PWA & Mobil Meta Etiketleri -->
+    <meta name="theme-color" content="#0f172a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="application-name" content="Hesap Makinesi">
+    <meta name="apple-mobile-web-app-title" content="Hesap Makinesi">
+    
+    <!-- PWA Manifest (Inline Web App Manifest) -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "Modern Hesap Makinesi",
+        "short_name": "Hesap Makinesi",
+        "description": "Android ve Windows için tam uyumlu gelişmiş hesap makinesi.",
+        "start_url": "./",
+        "display": "standalone",
+        "background_color": "#020617",
+        "theme_color": "#0f172a",
+        "icons": [
+            {
+                "src": "https://img.icons8.com/fluent/512/calculator.png",
+                "sizes": "512x512",
+                "type": "image/png",
+                "purpose": "any maskable"
+            }
+        ]
+    }'>
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,800;1,400&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        gold: {
-                            light: '#F4E0A5',
-                            DEFAULT: '#D4AF37',
-                            dark: '#AA820A',
-                        },
-                        darkBg: '#0D0D0E',
-                        cardBg: '#161619',
-                        borderGold: 'rgba(212, 175, 55, 0.25)'
-                    },
-                    fontFamily: {
-                        serif: ['Playfair Display', 'serif'],
-                        cinzel: ['Cinzel', 'serif'],
-                        sans: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
     <style>
-        body {
-            background-color: #0D0D0E;
-            color: #E5E7EB;
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0D0D0E;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #27272A;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #D4AF37;
-        }
-
-        /* Glow effects */
-        .gold-glow {
-            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
-        }
-        .box-glow {
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.08);
-        }
-        .box-glow:hover {
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
-        }
-
-        /* Fade Animation */
-        .fade-in-up {
-            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Eternal Flame Pulsing Animation */
-        .flame-glow {
-            animation: pulseFlame 2.5s infinite alternate ease-in-out;
-        }
-
-        @keyframes pulseFlame {
-            0% {
-                filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.6)) drop-shadow(0 0 25px rgba(212, 175, 55, 0.4));
-                transform: scale(1);
-            }
-            100% {
-                filter: drop-shadow(0 0 20px rgba(239, 68, 68, 0.9)) drop-shadow(0 0 45px rgba(212, 175, 55, 0.7));
-                transform: scale(1.03);
-            }
-        }
-
-        .timeline-line::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            width: 2px;
-            background: linear-gradient(180deg, rgba(212,175,55,0.1) 0%, rgba(212,175,55,0.8) 50%, rgba(212,175,55,0.1) 100%);
-            transform: translateX(-50%);
-        }
-
-        @media (max-width: 768px) {
-            .timeline-line::before {
-                left: 20px;
-            }
-        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .btn-active:active { transform: scale(0.94); filter: brightness(1.2); }
+        button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
-<body class="selection:bg-gold selection:text-black">
+<body class="bg-slate-950 text-slate-100 h-full flex flex-col justify-center items-center font-sans antialiased sm:p-4">
 
-    <!-- Navigation Header -->
-    <header class="fixed top-0 left-0 w-full z-50 bg-opacity-80 bg-black backdrop-blur-md border-b border-white/10 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <a href="#" class="flex items-center gap-3 group">
-                <span class="font-cinzel text-xl sm:text-2xl font-bold tracking-widest text-white group-hover:text-gold transition-colors">
-                    10 KASIM <span class="text-gold font-light">1938</span>
-                </span>
-            </a>
+    <!-- Ana Uygulama Konteyneri -->
+    <div class="w-full h-full sm:max-w-md sm:h-[840px] sm:rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl flex flex-col overflow-hidden relative">
+        
+        <!-- Üst Bar / Başlık & Geçmiş Butonu -->
+        <header class="flex items-center justify-between px-6 pt-6 pb-2 text-slate-400">
+            <span class="text-xs font-semibold tracking-wider uppercase flex items-center gap-1.5">
+                <i data-lucide="calculator" class="w-4 h-4 text-emerald-400"></i>
+                Hesap Makinesi
+            </span>
+            <button id="toggle-history-btn" class="p-2 rounded-full hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition-colors btn-active" title="Geçmişi Göster/Gizle">
+                <i data-lucide="history" class="w-5 h-5"></i>
+            </button>
+        </header>
+
+        <!-- Ekran Alanı -->
+        <div class="flex-1 flex flex-col justify-end px-6 py-4 text-right overflow-hidden relative">
+            <div id="expression-display" class="text-slate-400 text-lg sm:text-xl font-medium min-h-[1.75rem] overflow-x-auto no-scrollbar whitespace-nowrap tracking-wide"></div>
+            <div id="main-display" class="text-4xl sm:text-5xl font-bold text-slate-100 overflow-x-auto no-scrollbar whitespace-nowrap tracking-tight my-2">0</div>
+        </div>
+
+        <!-- İşlem Geçmişi Paneli -->
+        <div id="history-panel" class="absolute inset-x-0 bottom-0 top-16 bg-slate-900/95 backdrop-blur-md z-20 flex flex-col transition-transform duration-300 translate-y-full border-t border-slate-800">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-800">
+                <h3 class="font-semibold text-slate-200 flex items-center gap-2">
+                    <i data-lucide="clock" class="w-4 h-4 text-emerald-400"></i> İşlem Geçmişi
+                </h3>
+                <button id="clear-history-btn" class="text-xs font-medium text-rose-400 hover:text-rose-300 px-3 py-1.5 rounded-lg hover:bg-rose-950/30 transition-colors flex items-center gap-1">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Temizle
+                </button>
+            </div>
             
-            <nav class="hidden md:flex space-x-8 text-sm font-medium tracking-wide">
-                <a href="#hero" class="text-gray-300 hover:text-gold transition-colors">Ana Sayfa</a>
-                <a href="#anma" class="text-gray-300 hover:text-gold transition-colors">Saygı Duruşu</a>
-                <a href="#ilkeler" class="text-gray-300 hover:text-gold transition-colors">Fikirleri & İlkeleri</a>
-                <a href="#zaman-cizelgesi" class="text-gray-300 hover:text-gold transition-colors">Zaman Çizelgesi</a>
-                <a href="#ani-defteri" class="text-gray-300 hover:text-gold transition-colors">Anı Defteri</a>
-            </nav>
+            <div id="history-list" class="flex-1 overflow-y-auto p-6 space-y-4">
+                <div class="text-center text-slate-500 text-sm py-8">Henüz işlem geçmişi yok.</div>
+            </div>
 
-            <button onclick="toggleSilenceModal()" class="flex items-center gap-2 border border-gold/40 hover:border-gold bg-gold/10 hover:bg-gold/20 text-gold px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300">
-                <i class="fa-solid font-bold fa-ribbon text-sm"></i>
-                <span>Saygı Duruşu</span>
+            <button id="close-history-btn" class="m-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl font-medium text-sm transition-colors text-center">
+                Kapat
             </button>
         </div>
-    </header>
 
-    <!-- Hero Section -->
-    <section id="hero" class="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-4 overflow-hidden">
-        <!-- Background Overlay / Decorative Elements -->
-        <div class="absolute inset-0 bg-radial-gradient from-amber-950/20 via-black to-black opacity-80 z-0"></div>
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(212,175,55,0.05)_0%,_transparent_70%)]"></div>
-
-        <div class="relative z-10 max-w-5xl mx-auto text-center px-4">
-            
-            <!-- Eternal Ribbon / Emblem Visual -->
-            <div class="inline-flex items-center justify-center mb-6 p-3 rounded-full bg-white/5 border border-gold/30 flame-glow backdrop-blur-sm">
-                <i class="fa-solid fa-ribbon text-3xl text-gold"></i>
-            </div>
-
-            <p class="font-cinzel text-gold text-sm sm:text-base tracking-[0.3em] uppercase mb-4 font-semibold">
-                Beni görmek demek mutlaka yüzümü görmek değildir
-            </p>
-
-            <h1 class="font-serif text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-tight">
-                Fikirler Ölmez. <br/>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-gold-light to-gold gold-glow">
-                    Sonsuza Dek Kalbimizdesin.
-                </span>
-            </h1>
-
-            <p class="max-w-2xl mx-auto text-gray-400 text-base sm:text-lg leading-relaxed mb-10 font-light">
-                Cumhuriyetimizin kurucusu, büyük önder Gazi Mustafa Kemal Atatürk'ü, aramızdan ayrılışının yıldönümünde sonsuz minnet, saygı ve özlemle anıyoruz.
-            </p>
-
-            <!-- Countdown Timer Card -->
-            <div class="bg-cardBg/80 border border-gold border-opacity-30 rounded-2xl p-6 sm:p-8 max-w-xl mx-auto backdrop-blur-md shadow-2xl mb-10">
-                <h3 class="font-cinzel text-xs sm:text-sm text-gray-400 tracking-widest uppercase mb-4">
-                    10 Kasım 09:05 Anma Zamanlayıcısı
-                </h3>
-                <div class="grid grid-cols-4 gap-3 text-center" id="countdown">
-                    <div class="bg-black/60 p-3 rounded-lg border border-white/5">
-                        <span id="days" class="font-serif text-2xl sm:text-4xl font-bold text-gold">00</span>
-                        <span class="block text-[10px] sm:text-xs text-gray-500 uppercase mt-1">Gün</span>
-                    </div>
-                    <div class="bg-black/60 p-3 rounded-lg border border-white/5">
-                        <span id="hours" class="font-serif text-2xl sm:text-4xl font-bold text-gold">00</span>
-                        <span class="block text-[10px] sm:text-xs text-gray-500 uppercase mt-1">Saat</span>
-                    </div>
-                    <div class="bg-black/60 p-3 rounded-lg border border-white/5">
-                        <span id="minutes" class="font-serif text-2xl sm:text-4xl font-bold text-gold">00</span>
-                        <span class="block text-[10px] sm:text-xs text-gray-500 uppercase mt-1">Dakika</span>
-                    </div>
-                    <div class="bg-black/60 p-3 rounded-lg border border-white/5">
-                        <span id="seconds" class="font-serif text-2xl sm:text-4xl font-bold text-gold">00</span>
-                        <span class="block text-[10px] sm:text-xs text-gray-500 uppercase mt-1">Saniye</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Action CTA Buttons -->
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="#ani-defteri" class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-gradient-to-r from-gold to-gold-dark text-black font-semibold tracking-wide hover:opacity-90 transition-all shadow-lg shadow-gold/20 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-pen-nib"></i>
-                    <span>Anı Defterine Yaz</span>
-                </a>
-                <a href="#ilkeler" class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white/5 hover:bg-white/10 text-white border border-white/10 font-semibold tracking-wide transition-all flex items-center justify-center gap-2">
-                    <span>İlkelerini Keşfet</span>
-                    <i class="fa-solid fa-arrow-down text-xs"></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Interactive Silence / Tribute Section -->
-    <section id="anma" class="py-20 bg-black border-y border-white/5 relative">
-        <div class="max-w-4xl mx-auto px-4 text-center">
-            <span class="text-gold font-cinzel text-xs tracking-widest uppercase block mb-2">1 Dakikalık Saygı Duruşu</span>
-            <h2 class="font-serif text-3xl sm:text-4xl font-bold text-white mb-6">
-                09:05 - Zamanın Durduğu An
-            </h2>
-            <p class="text-gray-400 max-w-xl mx-auto text-sm sm:text-base leading-relaxed mb-8">
-                Saat 09:05'te siren sesleri eşliğinde tüm yurtta hayat durur. Onun bıraktığı emanetleri korumak ve mirasını yaşatmak için saygıyla eğiliyoruz.
-            </p>
-
-            <!-- Visual Flame / Candle Interactive element -->
-            <div class="relative inline-block my-4">
-                <div class="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-gold/10 border border-gold/40 flex items-center justify-center mx-auto flame-glow">
-                    <i class="fa-solid fa-fire-flame-curved text-4xl sm:text-5xl text-gold"></i>
-                </div>
-            </div>
-
-            <div class="mt-8">
-                <button onclick="toggleSilenceModal()" class="px-6 py-3 rounded-full bg-transparent border border-gold/60 text-gold hover:bg-gold hover:text-black transition-all duration-300 font-medium text-sm tracking-widest uppercase">
-                    <i class="fa-solid fa-volume-high mr-2"></i> Saygı Duruşunu Başlat
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Atatürk's Quotes & Principles Section -->
-    <section id="ilkeler" class="py-24 px-4 max-w-7xl mx-auto">
-        <div class="text-center mb-16">
-            <span class="text-gold font-cinzel text-xs tracking-widest uppercase block mb-2">Ölümsüz Miras</span>
-            <h2 class="font-serif text-3xl sm:text-5xl font-bold text-white mb-4">Veciz Sözler & Vizyon</h2>
-            <div class="w-16 h-1 bg-gold mx-auto rounded-full opacity-60"></div>
-        </div>
-
-        <!-- Quote Highlight Banner -->
-        <div class="bg-gradient-to-r from-cardBg via-zinc-900 to-cardBg border border-gold/20 rounded-3xl p-8 sm:p-12 mb-16 relative overflow-hidden box-glow">
-            <i class="fa-solid fa-quote-right absolute -bottom-10 -right-6 text-9xl text-white/5 pointer-events-none"></i>
-            <div class="max-w-3xl mx-auto text-center relative z-10">
-                <p class="font-serif italic text-xl sm:text-2xl text-gray-200 leading-relaxed mb-6">
-                    "Beni hatırlayınız; çünkü ben, Türkiye Cumhuriyeti'ni kuran ve Türk milletini özgürlüğe kavuşturan düşüncelerin ve ilkelerin adamıyım."
-                </p>
-                <span class="font-cinzel text-gold text-sm tracking-widest font-semibold uppercase">— Gazi Mustafa Kemal Atatürk</span>
-            </div>
-        </div>
-
-        <!-- Principles Grid Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Card 1 -->
-            <div class="bg-cardBg border border-white/5 rounded-2xl p-8 hover:border-gold/40 transition-all duration-300 group box-glow">
-                <div class="w-12 h-12 rounded-xl bg-gold/10 flex items-center justify-center text-gold mb-6 group-hover:bg-gold group-hover:text-black transition-colors">
-                    <i class="fa-solid fa-landmark text-xl"></i>
-                </div>
-                <h3 class="font-serif text-xl font-bold text-white mb-3">Cumhuriyetçilik</h3>
-                <p class="text-gray-400 text-sm leading-relaxed mb-4">
-                    "Egemenlik, kayıtsız şartsız milletindir." Millete kendi kaderini tayin etme hakkını veren en büyük devrim.
-                </p>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="bg-cardBg border border-white/5 rounded-2xl p-8 hover:border-gold/40 transition-all duration-300 group box-glow">
-                <div class="w-12 h-12 rounded-xl bg-gold/10 flex items-center justify-center text-gold mb-6 group-hover:bg-gold group-hover:text-black transition-colors">
-                    <i class="fa-solid fa-graduation-cap text-xl"></i>
-                </div>
-                <h3 class="font-serif text-xl font-bold text-white mb-3">Laiklik & Akılcılık</h3>
-                <p class="text-gray-400 text-sm leading-relaxed mb-4">
-                    "Hayatta en hakiki mürşit ilimdir." Bilimin ve aklın rehberliğinde çağdaş bir toplum hedefi.
-                </p>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="bg-cardBg border border-white/5 rounded-2xl p-8 hover:border-gold/40 transition-all duration-300 group box-glow">
-                <div class="w-12 h-12 rounded-xl bg-gold/10 flex items-center justify-center text-gold mb-6 group-hover:bg-gold group-hover:text-black transition-colors">
-                    <i class="fa-solid fa-earth-americas text-xl"></i>
-                </div>
-                <h3 class="font-serif text-xl font-bold text-white mb-3">Milliyetçilik & Barış</h3>
-                <p class="text-gray-400 text-sm leading-relaxed mb-4">
-                    "Yurtta sulh, cihanda sulh." Kendi kimliğine sahip çıkan ama evrensel barışı ve insanlığı kucaklayan vizyon.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Timeline / History Section -->
-    <section id="zaman-cizelgesi" class="py-24 bg-zinc-950/60 border-t border-white/5">
-        <div class="max-w-5xl mx-auto px-4">
-            <div class="text-center mb-16">
-                <span class="text-gold font-cinzel text-xs tracking-widest uppercase block mb-2">Tarihsel İzler</span>
-                <h2 class="font-serif text-3xl sm:text-5xl font-bold text-white mb-4">1938'den Günümüze Sonsuz Miras</h2>
-                <div class="w-16 h-1 bg-gold mx-auto rounded-full opacity-60"></div>
-            </div>
-
-            <div class="relative timeline-line">
-                <!-- Timeline Item 1 -->
-                <div class="mb-12 flex flex-col md:flex-row items-center justify-between w-full">
-                    <div class="order-1 md:w-5/12 text-right md:pr-8 mb-4 md:mb-0">
-                        <span class="text-gold font-cinzel text-sm font-bold">10 Kasım 1938 - 09:05</span>
-                        <h4 class="font-serif text-lg font-bold text-white mt-1">Dolmabahçe Sarayı'nda Veda</h4>
-                        <p class="text-gray-400 text-xs sm:text-sm mt-2 leading-relaxed">
-                            Türkiye Cumhuriyeti'nin kurucusu Gazi Mustafa Kemal Atatürk, Dolmabahçe Sarayı'nda hayata gözlerini yumdu.
-                        </p>
-                    </div>
-                    <div class="z-20 order-1 flex items-center justify-center w-10 h-10 rounded-full bg-gold text-black font-bold text-xs shadow-lg shadow-gold/30">
-                        1938
-                    </div>
-                    <div class="order-1 md:w-5/12 md:pl-8"></div>
-                </div>
-
-                <!-- Timeline Item 2 -->
-                <div class="mb-12 flex flex-col md:flex-row items-center justify-between w-full">
-                    <div class="order-1 md:w-5/12"></div>
-                    <div class="z-20 order-1 flex items-center justify-center w-10 h-10 rounded-full bg-zinc-800 border border-gold/50 text-gold font-bold text-xs">
-                        1953
-                    </div>
-                    <div class="order-1 md:w-5/12 md:pl-8 text-left mb-4 md:mb-0">
-                        <span class="text-gold font-cinzel text-sm font-bold">10 Kasım 1953</span>
-                        <h4 class="font-serif text-lg font-bold text-white mt-1">Anıtkabir'e Nakil</h4>
-                        <p class="text-gray-400 text-xs sm:text-sm mt-2 leading-relaxed">
-                            Atatürk'ün naaşı, Etnografya Müzesi'nden ebedi istirahathanesi olan Anıtkabir'e büyük bir törenle nakledildi.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Timeline Item 3 -->
-                <div class="mb-12 flex flex-col md:flex-row items-center justify-between w-full">
-                    <div class="order-1 md:w-5/12 text-right md:pr-8 mb-4 md:mb-0">
-                        <span class="text-gold font-cinzel text-sm font-bold">Her 10 Kasım</span>
-                        <h4 class="font-serif text-lg font-bold text-white mt-1">Sonsuz Saygı ve Özlem</h4>
-                        <p class="text-gray-400 text-xs sm:text-sm mt-2 leading-relaxed">
-                            Saat 09:05'te milyonlarca insan tek yürek olarak, Atatürk'ün ilke ve inkılaplarına olan bağlılığını yeniler.
-                        </p>
-                    </div>
-                    <div class="z-20 order-1 flex items-center justify-center w-10 h-10 rounded-full bg-zinc-800 border border-gold/50 text-gold font-bold text-xs">
-                        Bugün
-                    </div>
-                    <div class="order-1 md:w-5/12 md:pl-8"></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Guestbook / Anı Defteri Section -->
-    <section id="ani-defteri" class="py-24 px-4 max-w-5xl mx-auto">
-        <div class="text-center mb-16">
-            <span class="text-gold font-cinzel text-xs tracking-widest uppercase block mb-2">Sizden Gelenler</span>
-            <h2 class="font-serif text-3xl sm:text-5xl font-bold text-white mb-4">Sanal Anı Defteri</h2>
-            <p class="text-gray-400 text-sm max-w-md mx-auto">
-                Atatürk'e olan duygu, düşünce ve minnet mesajlarınızı paylaşın.
-            </p>
-            <div class="w-16 h-1 bg-gold mx-auto rounded-full opacity-60 mt-4"></div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <!-- Form Section -->
-            <div class="lg:col-span-5 bg-cardBg border border-white/10 rounded-2xl p-6 sm:p-8 box-glow">
-                <h3 class="font-serif text-xl font-bold text-white mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-feather-pointed text-gold"></i>
-                    <span>Mesaj Bırakın</span>
-                </h3>
-                
-                <form id="guestbook-form" onsubmit="addGuestMessage(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Adınız Soyadınız</label>
-                        <input type="text" id="user-name" required placeholder="Örn: Ahmet Yılmaz" class="w-full bg-black/60 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-gold transition-colors text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Şehir / Ülke</label>
-                        <input type="text" id="user-location" placeholder="Örn: Ankara" class="w-full bg-black/60 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-gold transition-colors text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Anma Mesajınız</label>
-                        <textarea id="user-message" required rows="4" placeholder="Atamız için duygu ve düşüncelerinizi yazınız..." class="w-full bg-black/60 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-gold transition-colors text-sm resize-none"></textarea>
-                    </div>
-                    <button type="submit" class="w-full py-3.5 rounded-lg bg-gold hover:bg-gold-dark text-black font-semibold text-sm tracking-wide transition-all shadow-md">
-                        Deftere Ekle
-                    </button>
-                </form>
-            </div>
-
-            <!-- Messages Stream -->
-            <div class="lg:col-span-7 space-y-4 max-h-[520px] overflow-y-auto pr-2" id="guestbook-list">
-                <!-- Anı defteri boş olarak başlar, eklenen mesajlar buraya gelecektir -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-black border-t border-white/10 py-12 px-4 text-center">
-        <div class="max-w-4xl mx-auto space-y-4">
-            <div class="flex justify-center items-center gap-3">
-                <i class="fa-solid fa-ribbon text-gold text-xl"></i>
-                <span class="font-cinzel text-lg font-bold tracking-widest text-white">10 KASIM 1938</span>
-            </div>
-            <p class="text-gray-500 text-xs sm:text-sm">
-                Mustafa Kemal Atatürk'ün Aziz Anısına Saygıyla Hazırlanmıştır.
-            </p>
-            <p class="text-gray-600 text-xs">
-                &copy; 1938 - Sonsuzluk | "Beni Türk hekimlerine emanet ediniz."
-            </p>
-        </div>
-    </footer>
-
-    <!-- Silence Modal / Audio Simulation -->
-    <div id="silence-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center hidden p-4">
-        <div class="bg-cardBg border border-gold/40 rounded-3xl p-8 max-w-lg w-full text-center relative box-glow">
-            <button onclick="toggleSilenceModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
-                <i class="fa-solid fa-xmark"></i>
+        <!-- Tuş Takımı (Keypad) -->
+        <div class="grid grid-cols-4 gap-3 p-6 bg-slate-900/50 border-t border-slate-800/80 pb-8 sm:pb-6">
+            <button data-action="clear" class="btn-active py-4 sm:py-5 rounded-2xl bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 text-xl font-semibold transition-all">AC</button>
+            <button data-action="delete" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800 text-slate-300 hover:bg-slate-700 flex justify-center items-center transition-all">
+                <i data-lucide="backspace" class="w-6 h-6"></i>
             </button>
-            
-            <div class="w-20 h-20 bg-gold/10 rounded-full border border-gold/40 flex items-center justify-center mx-auto mb-6 flame-glow">
-                <i class="fa-solid fa-bell text-3xl text-gold"></i>
-            </div>
+            <button data-action="operator" data-value="%" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800 text-emerald-400 hover:bg-slate-700 text-xl font-semibold transition-all">%</button>
+            <button data-action="operator" data-value="/" class="btn-active py-4 sm:py-5 rounded-2xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-2xl font-bold transition-all">÷</button>
 
-            <h3 class="font-serif text-2xl font-bold text-white mb-2">Saygı Duruşu & Siren Simülasyonu</h3>
-            <p class="text-gray-400 text-sm mb-6">
-                1 Dakikalık saygı duruşunda Atatürk'ün anısına sessizliği paylaşıyoruz.
-            </p>
+            <button data-action="number" data-value="7" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">7</button>
+            <button data-action="number" data-value="8" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">8</button>
+            <button data-action="number" data-value="9" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">9</button>
+            <button data-action="operator" data-value="*" class="btn-active py-4 sm:py-5 rounded-2xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-2xl font-bold transition-all">×</button>
 
-            <div class="bg-black/60 rounded-xl p-6 border border-white/5 mb-6">
-                <span id="silence-timer" class="font-serif text-5xl font-bold text-gold block mb-2">01:00</span>
-                <span class="text-xs text-gray-500 uppercase tracking-widest">Kalan Süre</span>
-            </div>
+            <button data-action="number" data-value="4" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">4</button>
+            <button data-action="number" data-value="5" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">5</button>
+            <button data-action="number" data-value="6" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">6</button>
+            <button data-action="operator" data-value="-" class="btn-active py-4 sm:py-5 rounded-2xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-2xl font-bold transition-all">−</button>
 
-            <div class="flex justify-center gap-4">
-                <button id="start-silence-btn" onclick="startSilenceTimer()" class="px-6 py-3 rounded-full bg-gold text-black font-semibold text-sm hover:bg-gold-dark transition-all">
-                    Başlat
-                </button>
-                <button onclick="toggleSilenceModal()" class="px-6 py-3 rounded-full bg-white/10 text-white font-semibold text-sm hover:bg-white/20 transition-all">
-                    Kapat
-                </button>
-            </div>
+            <button data-action="number" data-value="1" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">1</button>
+            <button data-action="number" data-value="2" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">2</button>
+            <button data-action="number" data-value="3" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">3</button>
+            <button data-action="operator" data-value="+" class="btn-active py-4 sm:py-5 rounded-2xl bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 text-2xl font-bold transition-all">+</button>
+
+            <button data-action="negate" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-300 hover:bg-slate-700 text-xl font-medium transition-all">±</button>
+            <button data-action="number" data-value="0" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">0</button>
+            <button data-action="decimal" class="btn-active py-4 sm:py-5 rounded-2xl bg-slate-800/80 text-slate-100 hover:bg-slate-700 text-2xl font-medium transition-all">.</button>
+            <button data-action="calculate" class="btn-active py-4 sm:py-5 rounded-2xl bg-emerald-500 text-slate-950 hover:bg-emerald-400 text-2xl font-bold shadow-lg shadow-emerald-500/20 transition-all">=</button>
         </div>
     </div>
 
-    <!-- JavaScript Logic -->
+    <!-- JavaScript Mantığı & Çevrimdışı PWA Desteği -->
     <script>
-        // Countdown timer calculation for next November 10th
-        function updateCountdown() {
-            const now = new Date();
-            let targetYear = now.getFullYear();
-            
-            // 10 Nov 09:05 target date
-            let targetDate = new Date(targetYear, 10, 10, 9, 5, 0); // Month is 0-indexed (10 = November)
+        let currentInput = '0';
+        let previousInput = '';
+        let operator = null;
+        let shouldResetDisplay = false;
+        let history = JSON.parse(localStorage.getItem('calc_history') || '[]');
 
-            if (now > targetDate) {
-                targetDate = new Date(targetYear + 1, 10, 10, 9, 5, 0);
+        const mainDisplay = document.getElementById('main-display');
+        const expressionDisplay = document.getElementById('expression-display');
+        const historyPanel = document.getElementById('history-panel');
+        const historyList = document.getElementById('history-list');
+        const toggleHistoryBtn = document.getElementById('toggle-history-btn');
+        const closeHistoryBtn = document.getElementById('close-history-btn');
+        const clearHistoryBtn = document.getElementById('clear-history-btn');
+
+        lucide.createIcons();
+
+        function updateDisplay() {
+            mainDisplay.textContent = formatNumber(currentInput);
+            if (operator !== null) {
+                expressionDisplay.textContent = `${formatNumber(previousInput)} ${getOperatorSymbol(operator)}`;
+            } else {
+                expressionDisplay.textContent = '';
             }
-
-            const diff = targetDate - now;
-
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-            document.getElementById('days').innerText = String(days).padStart(2, '0');
-            document.getElementById('hours').innerText = String(hours).padStart(2, '0');
-            document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
-            document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+            mainDisplay.scrollLeft = mainDisplay.scrollWidth;
         }
 
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
+        function formatNumber(numStr) {
+            if (numStr === 'Hata' || numStr === '' || numStr === undefined) return numStr;
+            const parts = numStr.split('.');
+            let integerPart = parts[0];
+            const decimalPart = parts.length > 1 ? '.' + parts[1] : '';
+            let isNegative = false;
+            if (integerPart.startsWith('-')) {
+                isNegative = true;
+                integerPart = integerPart.substring(1);
+            }
+            const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            return (isNegative ? '-' : '') + formattedInteger + decimalPart;
+        }
 
-        // Guestbook logic
-        function addGuestMessage(event) {
-            event.preventDefault();
+        function getOperatorSymbol(op) {
+            switch(op) {
+                case '+': return '+';
+                case '-': return '−';
+                case '*': return '×';
+                case '/': return '÷';
+                case '%': return '%';
+                default: return '';
+            }
+        }
 
-            const nameInput = document.getElementById('user-name');
-            const locationInput = document.getElementById('user-location');
-            const messageInput = document.getElementById('user-message');
+        function appendNumber(number) {
+            if (currentInput === '0' || shouldResetDisplay) {
+                currentInput = number;
+                shouldResetDisplay = false;
+            } else {
+                if (currentInput.replace(/[^0-9]/g, '').length >= 15) return;
+                currentInput += number;
+            }
+            updateDisplay();
+        }
 
-            const name = nameInput.value.trim();
-            const location = locationInput.value.trim() || 'Türkiye';
-            const message = messageInput.value.trim();
+        function appendDecimal() {
+            if (shouldResetDisplay) {
+                currentInput = '0.';
+                shouldResetDisplay = false;
+                updateDisplay();
+                return;
+            }
+            if (!currentInput.includes('.')) {
+                currentInput += '.';
+                updateDisplay();
+            }
+        }
 
-            if (!name || !message) return;
+        function chooseOperator(op) {
+            if (currentInput === 'Hata') return;
+            if (operator !== null && !shouldResetDisplay) calculate();
+            previousInput = currentInput;
+            operator = op;
+            shouldResetDisplay = true;
+            updateDisplay();
+        }
 
-            const list = document.getElementById('guestbook-list');
+        function calculate() {
+            if (operator === null || shouldResetDisplay) return;
+            let result;
+            const prev = parseFloat(previousInput);
+            const current = parseFloat(currentInput);
 
-            const messageCard = document.createElement('div');
-            messageCard.className = 'bg-cardBg border border-gold/30 rounded-xl p-5 fade-in-up';
-            messageCard.innerHTML = `
-                <div class="flex items-center justify-between mb-2">
-                    <span class="font-semibold text-gold text-sm">${escapeHtml(name)}</span>
-                    <span class="text-xs text-gray-500">${escapeHtml(location)}</span>
+            if (isNaN(prev) || isNaN(current)) return;
+
+            switch (operator) {
+                case '+': result = prev + current; break;
+                case '-': result = prev - current; break;
+                case '*': result = prev * current; break;
+                case '/': result = current === 0 ? 'Hata' : prev / current; break;
+                case '%': result = (prev * current) / 100; break;
+                default: return;
+            }
+
+            if (result !== 'Hata') {
+                result = Math.round(result * 100000000) / 100000000;
+                addHistoryItem({
+                    expression: `${formatNumber(previousInput)} ${getOperatorSymbol(operator)} ${formatNumber(currentInput)}`,
+                    result: result.toString()
+                });
+            }
+
+            currentInput = result.toString();
+            operator = null;
+            previousInput = '';
+            shouldResetDisplay = true;
+            updateDisplay();
+        }
+
+        function deleteDigit() {
+            if (shouldResetDisplay) return;
+            if (currentInput === 'Hata') { clearAll(); return; }
+            if (currentInput.length === 1 || (currentInput.length === 2 && currentInput.startsWith('-'))) {
+                currentInput = '0';
+            } else {
+                currentInput = currentInput.slice(0, -1);
+            }
+            updateDisplay();
+        }
+
+        function clearAll() {
+            currentInput = '0';
+            previousInput = '';
+            operator = null;
+            shouldResetDisplay = false;
+            updateDisplay();
+        }
+
+        function toggleNegate() {
+            if (currentInput === '0' || currentInput === 'Hata') return;
+            currentInput = currentInput.startsWith('-') ? currentInput.slice(1) : '-' + currentInput;
+            updateDisplay();
+        }
+
+        function addHistoryItem(item) {
+            history.unshift(item);
+            if (history.length > 30) history.pop();
+            localStorage.setItem('calc_history', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            if (history.length === 0) {
+                historyList.innerHTML = '<div class="text-center text-slate-500 text-sm py-8">Henüz işlem geçmişi yok.</div>';
+                return;
+            }
+            historyList.innerHTML = history.map((item, index) => `
+                <div class="p-3 bg-slate-800/50 hover:bg-slate-800 rounded-xl transition-colors cursor-pointer text-right history-item border border-slate-700/50" data-index="${index}">
+                    <div class="text-xs text-slate-400 mb-1">${item.expression}</div>
+                    <div class="text-lg font-semibold text-emerald-400">= ${formatNumber(item.result)}</div>
                 </div>
-                <p class="text-gray-300 text-sm leading-relaxed font-light italic">
-                    "${escapeHtml(message)}"
-                </p>
-            `;
+            `).join('');
 
-            list.prepend(messageCard);
-
-            // Clear inputs
-            nameInput.value = '';
-            locationInput.value = '';
-            messageInput.value = '';
+            document.querySelectorAll('.history-item').forEach(el => {
+                el.addEventListener('click', () => {
+                    const idx = el.getAttribute('data-index');
+                    currentInput = history[idx].result;
+                    shouldResetDisplay = false;
+                    updateDisplay();
+                    toggleHistory(false);
+                });
+            });
         }
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.innerText = text;
-            return div.innerHTML;
+        function toggleHistory(show) {
+            if (show) { renderHistory(); historyPanel.classList.remove('translate-y-full'); }
+            else { historyPanel.classList.add('translate-y-full'); }
         }
 
-        // Silence Modal & Timer Logic
-        let silenceInterval = null;
-        let timeLeft = 60;
-
-        function toggleSilenceModal() {
-            const modal = document.getElementById('silence-modal');
-            modal.classList.toggle('hidden');
-
-            // Reset timer state on close
-            if (modal.classList.contains('hidden')) {
-                clearInterval(silenceInterval);
-                silenceInterval = null;
-                timeLeft = 60;
-                document.getElementById('silence-timer').innerText = '01:00';
-                document.getElementById('start-silence-btn').innerText = 'Başlat';
-                document.getElementById('start-silence-btn').disabled = false;
-            }
-        }
-
-        function startSilenceTimer() {
-            if (silenceInterval) return;
-
-            const btn = document.getElementById('start-silence-btn');
-            btn.innerText = 'Devam Ediyor...';
-            btn.disabled = true;
-
-            // Optional Web Audio API Siren sound simulation tone generator
-            playSirenTone();
-
-            silenceInterval = setInterval(() => {
-                timeLeft--;
-                const secs = String(timeLeft).padStart(2, '0');
-                document.getElementById('silence-timer').innerText = `00:${secs}`;
-
-                if (timeLeft <= 0) {
-                    clearInterval(silenceInterval);
-                    silenceInterval = null;
-                    document.getElementById('silence-timer').innerText = '00:00';
-                    btn.innerText = 'Tamamlandı';
+        document.querySelectorAll('button[data-action]').forEach(button => {
+            button.addEventListener('click', () => {
+                const action = button.getAttribute('data-action');
+                const value = button.getAttribute('data-value');
+                switch (action) {
+                    case 'number': appendNumber(value); break;
+                    case 'operator': chooseOperator(value); break;
+                    case 'decimal': appendDecimal(); break;
+                    case 'calculate': calculate(); break;
+                    case 'clear': clearAll(); break;
+                    case 'delete': deleteDigit(); break;
+                    case 'negate': toggleNegate(); break;
                 }
-            }, 1000);
+            });
+        });
+
+        toggleHistoryBtn.addEventListener('click', () => toggleHistory(true));
+        closeHistoryBtn.addEventListener('click', () => toggleHistory(false));
+        clearHistoryBtn.addEventListener('click', () => {
+            history = [];
+            localStorage.removeItem('calc_history');
+            renderHistory();
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key >= '0' && e.key <= '9') appendNumber(e.key);
+            if (e.key === '.' || e.key === ',') appendDecimal();
+            if (e.key === '=' || e.key === 'Enter') { e.preventDefault(); calculate(); }
+            if (e.key === 'Backspace') deleteDigit();
+            if (e.key === 'Escape') clearAll();
+            if (['+', '-', '*', '/', '%'].includes(e.key)) chooseOperator(e.key);
+        });
+
+        // Offline Çevrimdışı Çalışma (Service Worker Entegrasyonu)
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                self.addEventListener('install', e => e.waitUntil(self.skipWaiting()));
+                self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+                self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
+            `;
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
         }
 
-        // Simple audio synthesizer tone for siren effect
-        function playSirenTone() {
-            try {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (!AudioContext) return;
-                
-                const ctx = new AudioContext();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(440, ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 3);
-
-                gain.gain.setValueAtTime(0.05, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 4);
-
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-
-                osc.start();
-                osc.stop(ctx.currentTime + 4);
-            } catch(e) {
-                console.log('Audio Context not allowed without interaction');
-            }
-        }
+        updateDisplay();
     </script>
 </body>
 </html>
